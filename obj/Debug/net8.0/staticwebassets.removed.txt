@@ -1,6 +1,0 @@
-C:\Users\PTL\source\repos\StudentManagement\StudentManagement\wwwroot\images\employees\21fa217e-9850-4880-9792-654d9ed831b2.png
-C:\Users\PTL\source\repos\StudentManagement\StudentManagement\wwwroot\images\employees\3c64c488-18a6-41ae-b509-c329b5d27058.png
-C:\Users\PTL\source\repos\StudentManagement\StudentManagement\wwwroot\images\employees\4bfde74b-0b0e-4fbd-b32b-90c7affd7553.jpg
-C:\Users\PTL\source\repos\StudentManagement\StudentManagement\wwwroot\images\employees\67bb90a2-8038-4be3-bb32-5d2e023946e2.png
-C:\Users\PTL\source\repos\StudentManagement\StudentManagement\wwwroot\images\employees\a73c3fe1-5503-4238-8473-2b29a9d40d44.PNG
-C:\Users\PTL\source\repos\StudentManagement\StudentManagement\wwwroot\images\employees\ca52fe61-f45c-46f0-8a42-94e03cd63b32.jpg

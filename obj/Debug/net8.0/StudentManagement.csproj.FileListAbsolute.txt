@@ -80,3 +80,4 @@ C:\Users\PTL\source\repos\StudentManagement\StudentManagement\obj\Debug\net8.0\r
 C:\Users\PTL\source\repos\StudentManagement\StudentManagement\obj\Debug\net8.0\StudentManagement.pdb
 C:\Users\PTL\source\repos\StudentManagement\StudentManagement\obj\Debug\net8.0\StudentManagement.genruntimeconfig.cache
 C:\Users\PTL\source\repos\StudentManagement\StudentManagement\obj\Debug\net8.0\ref\StudentManagement.dll
+C:\Users\PTL\source\repos\StudentManagement\StudentManagement\obj\Debug\net8.0\StudentManagement.sourcelink.json
