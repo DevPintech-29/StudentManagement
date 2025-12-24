@@ -1,4 +1,7 @@
-﻿namespace StudentManagement.Tests;
+﻿using NPOI.SS.Formula.Functions;
+using Xunit;
+
+namespace StudentManagement.Tests;
 
 public class UnitTest1
 {
