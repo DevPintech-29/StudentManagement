@@ -1,0 +1,113 @@
+﻿@model IEnumerable<StudentManagement.Models.Student>
+
+<br />
+<br />
+
+<h2>Students</h2>
+<a asp-action="Create" class="btn btn-primary">Add Student</a>
+<br />
+<br />
+
+<table id="datatable" class="display">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Name</td>
+                <td>@s.Age</td>
+                <td>@s.Email</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@s.StudentId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@s.StudentId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@s.StudentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .dt-buttons {
+        margin-right: 35px;
+    }
+</style>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Student Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#datatable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true,
+                "lengthMenu": [5, 10, 25, 50],
+                "dom": 'Bflrtip',
+                "buttons": ['copy', 'csv', 'excel']
+            });
+
+            $(document).on("click", "#datatable a:contains('Details')", function (e) {
+                e.preventDefault();
+                var url = $(this).attr("href");
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    dataType: "json",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    success: function (res) {
+                        console.log("Response:", res);
+                        if (res.success) {
+                            var s = res.data;
+                            var html = `
+                                <p><strong>ID:</strong> ${s.studentId}</p>
+                                <p><strong>Name:</strong> ${s.name}</p>
+                                <p><strong>Age:</strong> ${s.age}</p>
+                                <p><strong>Email:</strong> ${s.email}</p>
+                            `;
+                            $("#detailsModal .modal-body").html(html);
+                            $("#detailsModal").modal("show");
+                        } else {
+                            alert(res.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error:", error);
+                        alert("Error fetching student details.");
+                    }
+                });
+            });
+
+
+
+
+
+
+        });
+    </script>
+}

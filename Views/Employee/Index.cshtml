@@ -1,0 +1,121 @@
+﻿@model IEnumerable<StudentManagement.Models.Employee>
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "Employee List";
+}
+
+<h1>Employee List</h1>
+<a href="@Url.Action("Create", "Employee")" class="btn btn-success mb-3">Add New Employee</a>
+
+<table class="table table-striped" id="employeeTable">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Joining Date</th>
+            <th>Status</th>
+            <th>Interest</th>
+            <th>InterestIDs</th>
+            <th>District ID</th>
+            <th>Thana ID</th>
+            <th>Village ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr data-id="@employee.Id">
+                <td>@employee.Id</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(employee.ImagePath))
+                    {
+                        <img src="@employee.ImagePath" alt="Employee Image" width="50" height="50" />
+                    }
+                    else
+                    {
+                        <img src="~/images/default.png" alt="No Image" width="50" height="50" />
+                    }
+                </td>
+
+                <td>@employee.Name</td>
+                <td>@employee.Email</td>
+                <td>@employee.Phone</td>
+                <td>@employee.JoiningDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <span class="badge @(employee.IsActive ? "bg-success" : "bg-danger")">
+                        @(employee.IsActive ? "Active" : "Inactive")
+                    </span>
+                </td>
+                <td>@employee.InterestNames</td>
+                <td>@employee.InterestIDs</td>
+                <td>@employee.DistrictId</td>
+                <td>@employee.ThanaId</td>
+                <td>@employee.VillageId</td>
+                <td>
+                    <button class="btn btn-danger btn-sm delete-btn" data-id="@employee.Id">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this employee?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDelete" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let deleteId = null;
+
+
+        $(document).on("click", ".delete-btn", function () {
+            deleteId = $(this).data("id");
+            $("#deleteModal").modal("show");
+        });
+
+         $("#confirmDelete").click(function () {
+            if (!deleteId) return;
+
+            $.ajax({
+                url: '/Employee/Delete',
+                type: 'POST',
+                data: {
+                    id: deleteId,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+
+                },
+                success: function () {
+                    $("#deleteModal").modal("hide");
+                    $('tr[data-id="' + deleteId + '"]').fadeOut(500, function () {
+                        $(this).remove();
+                    });
+                },
+                error: function (err) {
+                    alert("Error deleting employee.");
+                    console.log(err);
+                }
+            });
+        });
+
+    </script>
+}

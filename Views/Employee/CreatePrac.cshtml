@@ -1,0 +1,256 @@
+﻿@model StudentManagement.Models.Employee
+
+@{
+    ViewData["Title"] = "Create Employee";
+}
+
+<h2>Create Employee</h2>
+
+<form asp-action="CreatePrac" method="post" class="mt-3" id="employeeForm">
+    <div class="form-group mb-3">
+        <label asp-for="Name" class="form-label" for="Name"></label>
+        <input asp-for="Name" class="form-control" id="Name" placeholder="Enter full name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Sex" class="form-label" for="Sex"></label>
+        <select asp-for="Sex" class="form-control" id="Sex">
+            <option value="">-- Select Gender --</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+        <span asp-validation-for="Sex" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="DistrictId" class="form-label" for="DistrictId"></label>
+        <select id="DistrictId" name="DistrictId" class="form-control">
+            <option value="">-- Select District --</option>
+            @if (ViewBag.Districts != null)
+            {
+                @foreach (var district in ViewBag.Districts as IEnumerable<StudentManagement.Models.District>)
+                {
+                    <option value="@district.Id" selected="@(district.Id == Model?.DistrictId)">@district.Name</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="DistrictId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="ThanaId">Thana <span class="text-danger">*</span></label>
+        <select id="ThanaId" name="ThanaId" class="form-control" disabled>
+            <option value="">-- Select Thana --</option>
+        </select>
+        <span asp-validation-for="ThanaId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="VillageId">Village <span class="text-danger">*</span></label>
+        <select id="VillageId" name="VillageId" class="form-control" disabled>
+            <option value="">-- Select Village --</option>
+        </select>
+        <span asp-validation-for="VillageId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="JoiningDate" class="form-label" for="JoiningDate"></label>
+        <input asp-for="JoiningDate" type="date" value="@(DateTime.Now.ToString(" yyyy-MM-dd"))" class="form-control" id="JoiningDate" />
+        <span asp-validation-for="JoiningDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Email" class="form-label" for="Email"></label>
+        <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="Enter email address" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Phone" class="form-label" for="Phone"></label>
+        <input asp-for="Phone" class="form-control" id="Phone" placeholder="Enter phone number" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" id="IsActive" />
+        <label asp-for="IsActive" class="form-check-label" for="IsActive"></label>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="btnCreate">Create</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2" id="btnBack">Back to List</a>
+</form>
+<br /><br />
+<hr class="my-4" />
+<table class="table table-bordered mt-3" id="ViewTable">
+    <div class="text-end">
+        <button type="button" class="btn btn-success btn-lg addtodbtable">Add to DB</button>
+    </div>
+    <br />
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Sex</th>
+            <th>District</th>
+            <th>Thana</th>
+            <th>Village</th>
+            <th>Joining Date</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Active</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+           $("#ThanaId").prop("disabled",true);
+           $("#VillageId").prop("disabled",true);
+
+           $("#DistrictId").change(function () {
+                var districtId = $(this).val();
+                if (districtId) {
+                    $("#ThanaId").prop("disabled", false);
+                    $.ajax({
+                        url: '/Employee/GetThanasByDistrict',
+                        type: 'GET',
+                        data: { districtId: parseInt(districtId) },
+                        success: function (data) {
+                            console.log('Thanas loaded:', data);
+                            var thanaSelect = $('#ThanaId');
+                            thanaSelect.empty();
+                            thanaSelect.append('<option value="">-- Select Thana --</option>');
+
+                            if (data && data.length > 0) {
+                                $.each(data, function (index, thana) {
+                                    thanaSelect.append('<option value="' + thana.id + '">' + thana.name + '</option>');
+                                });
+                                thanaSelect.prop('disabled', false);
+                            } else {
+                                console.log('No thanas found for this district');
+                                alert('No Thanas found for this district.');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error loading thanas:', error);
+                            alert('Failed to load Thanas. Please try again.');
+                        }
+                    });
+                }
+            });
+            $("#ThanaId").change(function () {
+                var VillageId = $(this).val();
+                if (VillageId) {
+                    $("#VillageId").prop("disabled", false);
+                }
+            });
+
+                    $("#btnCreate").click(function(e){
+                        e.preventDefault();
+
+                        var name = $("#Name").val();
+                        var sex = $("#Sex").val();
+                        var districtId = $("#DistrictId").val();
+                        var districtText = $("#DistrictId option:selected").text();
+                        var thanaId = $("#ThanaId").val();
+                        var thanaText = $("#ThanaId option:selected").text();      
+                        var villageId = $("#VillageId").val();
+                        var villageText = $("#VillageId option:selected").text();  
+                        var joiningDate = $("#JoiningDate").val();
+                        var email = $("#Email").val();
+                        var phone = $("#Phone").val();
+                        var isActive = $("#IsActive").is(":checked") ? "Yes" : "No";
+
+                        var row = `<tr>
+                                       <td>${name}</td>
+                                       <td>${sex}</td>
+                                       <td data-id="${districtId}">${districtText}</td>
+                                       <td data-id="${thanaId}">${thanaText}</td>
+                                       <td data-id="${villageId}">${villageText}</td>
+                                       <td>${joiningDate}</td>
+                                       <td>${email}</td>
+                                       <td>${phone}</td>
+                                       <td>${isActive}</td>
+                                       <td>
+                                           <button type="button" class="btn btn-sm view-btn">View</button>|
+                                           <button type="button" class="btn btn-sm edit-btn">Edit</button>|
+                                           <button type="button" class="btn btn-sm delete-btn">Delete</button>
+                                       </td>
+                                   </tr>`;
+
+                        $("#ViewTable tbody").append(row);
+
+                        $('form')[0].reset();
+                        $('#ThanaId, #VillageId').prop('disabled', true).empty().append('<option value="">-- Select --</option>');
+                    });
+
+                    $("#ViewTable").on("click", ".delete-btn", function(){
+                        $(this).closest('tr').remove();
+                    });
+
+                    $(".addtodbtable").click(function(e){
+                        e.preventDefault();
+                        var tableRows = $('#ViewTable tbody tr');
+                        var employees = [];
+                        tableRows.each(function() {
+                            var row = $(this);
+                            var employee = {
+                                Name: row.find('td:eq(0)').text(),
+                                Sex: row.find('td:eq(1)').text(),
+                                DistrictId: parseInt(row.find('td:eq(2)').data('id')),
+                                ThanaId: parseInt(row.find('td:eq(3)').data('id')),
+                                VillageId: parseInt(row.find('td:eq(4)').data('id')),
+                                JoiningDate: row.find('td:eq(5)').text(),
+                                Email: row.find('td:eq(6)').text(),
+                                Phone: row.find('td:eq(7)').text(),
+                                IsActive: row.find('td:eq(8)').text() === 'Yes',
+
+
+                            };
+                            employees.push(employee);
+                        });
+
+                        var $btn = $(this);
+                        $btn.prop('disabled', true).text('Saving...');
+                        console.log(JSON.stringify(employees));
+                        $.ajax({
+                            url: '/Employee/SaveEmployees',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(employees),
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#ViewTable tbody').empty();
+                                    $('form')[0].reset();
+                                    $('#ThanaId, #VillageId').prop('disabled', true).empty().append('<option value="">-- Select --</option>');
+                                } else {
+                                    alert('Error: ' + response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error saving employees:', error);
+                                alert('Failed to save employees. Please try again. Error: ' + error);
+                            },
+                            complete: function() {
+                                $btn.prop('disabled', false).text('Add to DB');
+                            }
+                        });
+
+                    });
+                    
+        });
+    </script>
+
+}
