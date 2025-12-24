@@ -59,6 +59,10 @@
               "target": "Package",
               "version": "[6.0.3, )"
             },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.72, )"
+            },
             "NPOI": {
               "target": "Package",
               "version": "[2.7.5, )"
