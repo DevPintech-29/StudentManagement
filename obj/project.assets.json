@@ -829,6 +829,19 @@
           }
         }
       },
+      "xunit.assert/2.9.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/xunit.assert.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/xunit.assert.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "xunit.extensibility.core/2.9.3": {
         "type": "package",
         "dependencies": {
@@ -2145,6 +2158,23 @@
         "xunit.abstractions.nuspec"
       ]
     },
+    "xunit.assert/2.9.3": {
+      "sha512": "/Kq28fCE7MjOV42YLVRAJzRF0WmEqsmflm0cfpMjGtzQ2lR5mYVj1/i0Y8uDAOLczkL3/jArrwehfMD0YogMAA==",
+      "type": "package",
+      "path": "xunit.assert/2.9.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "_content/README.md",
+        "_content/logo-128-transparent.png",
+        "lib/net6.0/xunit.assert.dll",
+        "lib/net6.0/xunit.assert.xml",
+        "lib/netstandard1.1/xunit.assert.dll",
+        "lib/netstandard1.1/xunit.assert.xml",
+        "xunit.assert.2.9.3.nupkg.sha512",
+        "xunit.assert.nuspec"
+      ]
+    },
     "xunit.extensibility.core/2.9.3": {
       "sha512": "kf3si0YTn2a8J8eZNb+zFpwfoyvIrQ7ivNk5ZYA5yuYk1bEtMe4DxJ2CF/qsRgmEnDr7MnW1mxylBaHTZ4qErA==",
       "type": "package",
@@ -2191,6 +2221,7 @@
       "Dapper >= 2.1.66",
       "Microsoft.Data.SqlClient >= 6.0.3",
       "NPOI >= 2.7.5",
+      "xunit.assert >= 2.9.3",
       "xunit.extensibility.core >= 2.9.3"
     ]
   },
@@ -2240,7 +2271,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -2257,6 +2288,10 @@
           "NPOI": {
             "target": "Package",
             "version": "[2.7.5, )"
+          },
+          "xunit.assert": {
+            "target": "Package",
+            "version": "[2.9.3, )"
           },
           "xunit.extensibility.core": {
             "target": "Package",
@@ -2282,7 +2317,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
